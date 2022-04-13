@@ -1,8 +1,62 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+* {
+  margin: 0;
+  padding: 0
 }
 
-a {
+body {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  min-height: 100vh
+}
+
+a, a:hover {
   color: #00B7FF;
+  text-decoration: none
+}
+
+li {
+  list-style-type: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+form {
+  max-width: 500px;
+}
+
+form textarea {
+  height: 200px;
+  resize: none;
+}
+
+form input {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #aaa;
+}
+
+form input:focus {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #000;
+}
+
+form textarea {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #aaa;
+}
+
+form textarea:focus {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #000;
+}
+
+.field input:required + label::after,
+.field textarea:required + label::after {
+  content: ' *';
 }
