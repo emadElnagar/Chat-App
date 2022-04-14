@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 const { isNotAuth } = require('../auth');
 const User = require('../models/user');
@@ -87,7 +88,7 @@ router.post('/register', isNotAuth, [
 
 router.get('/login', isNotAuth, (req, res) => {
   let errorMessage = req.flash('loginError');
-  res.render('user/login.ejs', {title: 'Chat'});
+  res.render('user/login.ejs', {title: 'Chat', messages: errorMessage});
 });
 
 router.post('/login', isNotAuth, async (req, res, next)=> {
@@ -119,6 +120,55 @@ router.post('/login', isNotAuth, async (req, res, next)=> {
   } else {
     res.redirect(nextPage);
   }
+});
+
+router.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return console.log(err);
+    }
+    res.redirect('/');
+  });
+});
+
+router.get('/profile/:id', async(req, res, next) => {
+  const userId = req.params.id;
+  const profile = await User.findById(userId);
+  const errorMessage = req.flash('profileError');
+  const passworderrorMessage = req.flash('changePasswordError');
+  const changeEmailError = req.flash('changeEmailError')
+  const successMessage = req.flash('success');
+  const changeUserNameError = req.flash('changeUserNameError')
+  if (!profile) {
+    res.render('404', { title: 'Chat-profile', user: req.session.user });
+    return;
+  }
+  res.render('user/profile', {
+    title: 'Chat-profile',
+    user: req.session.user,
+    message: errorMessage,
+    passworderrorMessage: passworderrorMessage,
+    successMessage: successMessage,
+    changeEmailError: changeEmailError,
+    changeUserNameError: changeUserNameError,
+    profile: {
+      id: profile._id,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      gender: profile.gender,
+      image: profile.profileImg,
+      isAdmin: profile.isAdmin,
+      createdAt: profile.createdAt.toDateString()
+    },
+    isProfileOwner: function () {
+      if (req.session.user) {
+        return req.session.user._id === req.params.id;
+      } else {
+        return false;
+      }
+    }
+  });
 });
 
 module.exports = router;
