@@ -6,3 +6,4 @@ A real time chat app which user can use to get online friends and chat with them
 * MongoDB
 * ejs
 * CSS
+* And more
