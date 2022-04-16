@@ -151,23 +151,7 @@ router.get('/profile/:id', async(req, res, next) => {
     successMessage: successMessage,
     changeEmailError: changeEmailError,
     changeUserNameError: changeUserNameError,
-    profile: {
-      id: profile._id,
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      email: profile.email,
-      gender: profile.gender,
-      image: profile.profileImg,
-      isAdmin: profile.isAdmin,
-      createdAt: profile.createdAt.toDateString()
-    },
-    isProfileOwner: function () {
-      if (req.session.user) {
-        return req.session.user._id === req.params.id;
-      } else {
-        return false;
-      }
-    }
+    profile: profile,
   });
 });
 
