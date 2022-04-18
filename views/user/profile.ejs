@@ -7,6 +7,11 @@
       </div>
       <div class="col-8">
         <h1 class="text-center text-capitalize"><%= profile.firstName %> <%= profile.lastName %></h1>
+        <% if (isFriend === true) { %>
+          <span>You are Friends</span>
+        <% } else { %>
+          <span>You are Not friends</span>
+        <% } %>
       </div>
     </div>
     <div class="row mt-3">

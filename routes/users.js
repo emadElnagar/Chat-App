@@ -152,6 +152,9 @@ router.get('/profile/:id', async(req, res, next) => {
     changeEmailError: changeEmailError,
     changeUserNameError: changeUserNameError,
     profile: profile,
+    isFriend: function () {
+      return profile.friends.includes(req.user.id);
+    }
   });
 });
 
