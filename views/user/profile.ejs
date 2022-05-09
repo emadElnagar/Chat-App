@@ -7,11 +7,31 @@
       </div>
       <div class="col-8">
         <h1 class="text-center text-capitalize"><%= profile.firstName %> <%= profile.lastName %></h1>
-        <% if (isFriend === true) { %>
-          <span>You are Friends</span>
-        <% } else { %>
-          <span>You are Not friends</span>
-        <% } %>
+        <div class="d-flex justify-content-center mt-3">
+          <% if (user) { %>
+            <% if (user._id != profile._id) { %>
+              <% if (isFriend == true) { %>
+                <a href="#" class="btn btn-primary me-3">delete friend</a>
+                <a href="#" class="btn btn-primary d-inline-flex">
+                  <span class="material-icons mx-2">chat</span> chat
+                </a>
+              <% } else if (isRequestSent == true) { %>
+                <a href="#" class="btn btn-primary d-inline-flex">
+                  <span class="material-icons mx-2">person_add_disabled</span> cancel request
+                </a>
+              <% } else if (isHasRequested == true) { %>
+                <a href="#" class="btn btn-primary me-3">confirm</a>
+                <a href="#" class="btn btn-primary d-inline-flex">ignore</a>
+              <% } else { %>
+                <a href="#" class="btn btn-primary d-inline-flex">
+                  <span class="material-icons mx-2">person_add</span>add friend
+                </a>
+              <% } %>
+            <% } %>
+          <% } else { %>
+            <span class="fs-5">login to chat</span>
+          <% } %>
+        </div>
       </div>
     </div>
     <div class="row mt-3">

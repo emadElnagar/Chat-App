@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/register', isNotAuth, (req, res) => {
   let errorMessage = req.flash('error');
-  res.render('user/register.ejs', {title: 'Chat', messages: errorMessage});
+  res.render('user/register.ejs', {title: 'Chat', messages: errorMessage, user: false});
 });
 
 router.post('/register', isNotAuth, [
@@ -88,7 +88,7 @@ router.post('/register', isNotAuth, [
 
 router.get('/login', isNotAuth, (req, res) => {
   let errorMessage = req.flash('loginError');
-  res.render('user/login.ejs', {title: 'Chat', messages: errorMessage});
+  res.render('user/login.ejs', {title: 'Chat', messages: errorMessage, user: false});
 });
 
 router.post('/login', isNotAuth, async (req, res, next)=> {
@@ -134,11 +134,6 @@ router.get('/logout', (req, res) => {
 router.get('/profile/:id', async(req, res, next) => {
   const userId = req.params.id;
   const profile = await User.findById(userId);
-  const errorMessage = req.flash('profileError');
-  const passworderrorMessage = req.flash('changePasswordError');
-  const changeEmailError = req.flash('changeEmailError')
-  const successMessage = req.flash('success');
-  const changeUserNameError = req.flash('changeUserNameError')
   if (!profile) {
     res.render('404', { title: 'Chat-profile', user: req.session.user });
     return;
@@ -146,14 +141,15 @@ router.get('/profile/:id', async(req, res, next) => {
   res.render('user/profile', {
     title: 'Chat-profile',
     user: req.session.user,
-    message: errorMessage,
-    passworderrorMessage: passworderrorMessage,
-    successMessage: successMessage,
-    changeEmailError: changeEmailError,
-    changeUserNameError: changeUserNameError,
     profile: profile,
     isFriend: function () {
-      return profile.friends.includes(req.user.id);
+      return User.friends.find(friend => friend.id === req.session.user._id);
+    },
+    isRequestSent: function () {
+      return User.sentRequests.find(friend => friend.id === req.session.user._id);
+    },
+    isHasRequested: function () {
+      return User.friendRequests.find(friend => friend.id === req.session.user._id);
     }
   });
 });
