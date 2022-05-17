@@ -23,13 +23,17 @@
                 <a href="#" class="btn btn-primary me-3">confirm</a>
                 <a href="#" class="btn btn-primary d-inline-flex">ignore</a>
               <% } else { %>
-                <a href="#" class="btn btn-primary d-inline-flex">
-                  <span class="material-icons mx-2">person_add</span>add friend
-                </a>
+                <form action="/users/request/<%= profile._id %>" method="post">
+                  <button type="submit" class="btn btn-primary d-inline-flex">
+                    <span class="material-icons mx-2">person_add</span>add friend
+                  </button>
+                </form>
               <% } %>
             <% } %>
           <% } else { %>
-            <span class="fs-5">login to chat</span>
+            <a href="/users/login?next=/users/profile/<%= profile._id %>" class="btn btn-primary d-inline-flex">
+              <span class="material-icons mx-2">person_add</span>add friend
+            </a>
           <% } %>
         </div>
       </div>

@@ -10,11 +10,13 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+// GET USER REGISTRATION PAGE
 router.get('/register', isNotAuth, (req, res) => {
   let errorMessage = req.flash('error');
   res.render('user/register.ejs', {title: 'Chat', messages: errorMessage, user: false});
 });
 
+// USER REGISTER
 router.post('/register', isNotAuth, [
   check('firstName')
     .not().isEmpty().withMessage('please enter your first name')
@@ -86,11 +88,13 @@ router.post('/register', isNotAuth, [
   });
 });
 
+// GET LOGIN PAGE
 router.get('/login', isNotAuth, (req, res) => {
   let errorMessage = req.flash('loginError');
   res.render('user/login.ejs', {title: 'Chat', messages: errorMessage, user: false});
 });
 
+// USER LOGIN
 router.post('/login', isNotAuth, async (req, res, next)=> {
   const user = await User.findOne({ email: req.body.email });
   const loginError = "wrong email or password";
@@ -122,6 +126,7 @@ router.post('/login', isNotAuth, async (req, res, next)=> {
   }
 });
 
+// USER LOGOUT
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -131,6 +136,7 @@ router.get('/logout', (req, res) => {
   });
 });
 
+// GET USER PROFILE PAGE
 router.get('/profile/:id', async(req, res, next) => {
   const userId = req.params.id;
   const profile = await User.findById(userId);
@@ -150,6 +156,29 @@ router.get('/profile/:id', async(req, res, next) => {
     },
     isHasRequested: function () {
       return User.friendRequests.find(friend => friend.id === req.session.user._id);
+    }
+  });
+});
+
+// SEND AND RECIEVE FRIEND REQUESTS
+router.post('/request/:id', async(req, res, next) => {
+  const user = req.session.user;
+  const profileId = req.params.id;
+  const profile = await User.findById(profileId);
+  const newUser = { sentRequests: { firstName: profile.firstName, lastName:profile.lastName, image: profile.image, id: profile._id } };
+  const newProfile = { friendRequests: { firstName: user.firstName, lastName:user.lastName, image: user.image, id: user._id } };
+  User.updateOne({ _id: profileId }, { $push: newProfile }, (err, doc) => {
+    if(err) {
+      console.log(err);
+    } else {
+      return;
+    }
+  });
+  User.updateOne({ _id: user._id }, { $push: newUser }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`/users/profile/${profileId}`);
     }
   });
 });

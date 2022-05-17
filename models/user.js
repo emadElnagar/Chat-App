@@ -10,9 +10,9 @@ const userSchema = mongoose.Schema({
   profileImg: { type: String, default: '/images/default-user-image.png' },
   isAdmin: { type: Boolean, required: true, default: false },
   isModerator: { type: Boolean, required: true, default: false },
-  friends: { type: [{ name: String, image: String, id: String }], default: [] },
-  friendRequests: { type: [{ name: String, id: String }], default: [] },
-  sentRequests: { type: [{ name: String, id: String }], default: [] }
+  friends: { type: [{ firstName: String, lastName:String, image: String, id: String }], default: [] },
+  friendRequests: { type: [{ firstName: String, lastName:String, image: String, id: String }], default: [] },
+  sentRequests: { type: [{ firstName: String, lastName:String, image: String, id: String }], default: [] }
 }, {
   timestamps: true,
 });
