@@ -144,19 +144,31 @@ router.get('/profile/:id', async(req, res, next) => {
     res.render('404', { title: 'Chat-profile', user: req.session.user });
     return;
   }
+  const isFriend = () => {
+    if (req.session.user) {
+      const friendRequests = profile.friends.find(friend => friend.id === req.session.user._id);
+      return friendRequests != undefined;
+    }
+  }
+  const isRequestSent = () => {
+    if (req.session.user) {
+      const friendRequests = profile.sentRequests.find(friend => friend.id === req.session.user._id);
+      return friendRequests != undefined;
+    }
+  }
+  const isHasRequested = () => {
+    if (req.session.user) {
+      const friendRequests = profile.friendRequests.find(friend => friend.id === req.session.user._id);
+      return friendRequests != undefined;
+    }
+  }
   res.render('user/profile', {
     title: 'Chat-profile',
     user: req.session.user,
     profile: profile,
-    isFriend: function () {
-      return User.friends.find(friend => friend.id === req.session.user._id);
-    },
-    isRequestSent: function () {
-      return User.sentRequests.find(friend => friend.id === req.session.user._id);
-    },
-    isHasRequested: function () {
-      return User.friendRequests.find(friend => friend.id === req.session.user._id);
-    }
+    isFriend: isFriend(),
+    isRequestSent: isRequestSent(),
+    isHasRequested: isHasRequested()
   });
 });
 

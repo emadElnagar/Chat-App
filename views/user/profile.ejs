@@ -15,11 +15,11 @@
                 <a href="#" class="btn btn-primary d-inline-flex">
                   <span class="material-icons mx-2">chat</span> chat
                 </a>
-              <% } else if (isRequestSent == true) { %>
+              <% } else if (isHasRequested == true) { %>
                 <a href="#" class="btn btn-primary d-inline-flex">
                   <span class="material-icons mx-2">person_add_disabled</span> cancel request
                 </a>
-              <% } else if (isHasRequested == true) { %>
+              <% } else if (isRequestSent == true) { %>
                 <a href="#" class="btn btn-primary me-3">confirm</a>
                 <a href="#" class="btn btn-primary d-inline-flex">ignore</a>
               <% } else { %>
