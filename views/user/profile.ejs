@@ -11,7 +11,11 @@
           <% if (user) { %>
             <% if (user._id != profile._id) { %>
               <% if (isFriend == true) { %>
-                <a href="#" class="btn btn-primary me-3">delete friend</a>
+                <form action="/users/remove/<%= profile._id %>" method="post">
+                  <button type="submit" class="btn btn-primary me-3 d-inline-flex">
+                    <span class="material-icons mx-2">person_remove</span> delete friend
+                  </button>
+                </form>
                 <a href="#" class="btn btn-primary d-inline-flex">
                   <span class="material-icons mx-2">chat</span> chat
                 </a>

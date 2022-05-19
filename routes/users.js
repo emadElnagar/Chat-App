@@ -294,4 +294,41 @@ router.post('/accept/:id', isAuth, async(req, res) => {
   })
 });
 
+// REMOVE FRIEND
+router.post('/remove/:id', isAuth, async(req, res) => {
+  const user = req.session.user;
+  const profileId = req.params.id;
+  const profile = await User.findById(profileId);
+  // USER INFORMATIONS OBJECT
+  const userObj = {
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    image: user.image
+  };
+  // PROFILE INFORMATIONS OBJECT
+  const profileObj = {
+    id: profile._id,
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    image: profile.profileImg
+  };
+  // REMOVE PROFILE FROM USER FRIENDS
+  User.updateOne({ _id: user._id }, { $pull: { friends: profileObj } }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      return;
+    }
+  });
+  // REMOVE USER FROM PROFILE FRIENDS
+  User.updateOne({ _id: profileId }, { $pull: { friends: userObj } }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`/users/profile/${profileId}`);
+    }
+  });
+});
+
 module.exports = router;
