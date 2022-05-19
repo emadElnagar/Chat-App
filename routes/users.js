@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
-const { isNotAuth } = require('../auth');
+const { isAuth, isNotAuth } = require('../auth');
 const User = require('../models/user');
 
 /* GET users listing. */
@@ -173,11 +173,11 @@ router.get('/profile/:id', async(req, res, next) => {
 });
 
 // SEND AND RECIEVE FRIEND REQUESTS
-router.post('/request/:id', async(req, res, next) => {
+router.post('/request/:id', isAuth, async(req, res, next) => {
   const user = req.session.user;
   const profileId = req.params.id;
   const profile = await User.findById(profileId);
-  const newUser = { sentRequests: { firstName: profile.firstName, lastName:profile.lastName, image: profile.image, id: profile._id } };
+  const newUser = { sentRequests: { firstName: profile.firstName, lastName:profile.lastName, image: profile.profileImg, id: profile._id } };
   const newProfile = { friendRequests: { firstName: user.firstName, lastName:user.lastName, image: user.image, id: user._id } };
   User.updateOne({ _id: profileId }, { $push: newProfile }, (err, doc) => {
     if(err) {
@@ -187,6 +187,29 @@ router.post('/request/:id', async(req, res, next) => {
     }
   });
   User.updateOne({ _id: user._id }, { $push: newUser }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`/users/profile/${profileId}`);
+    }
+  });
+});
+
+// CANCEL FRIEND REQUEST
+router.post('/cancel/:id', isAuth, async(req, res) => {
+  const user = req.session.user;
+  const profileId = req.params.id;
+  const profile = await User.findById(profileId);
+  const newUser = { sentRequests: { firstName: profile.firstName, lastName:profile.lastName, image: profile.profileImg, id: profile._id } };
+  const newProfile = { friendRequests: { firstName: user.firstName, lastName:user.lastName, image: user.image, id: user._id } };
+  User.updateOne({ _id: profileId }, { $pull: newProfile }, (err, doc) => {
+    if(err) {
+      console.log(err);
+    } else {
+      return;
+    }
+  });
+  User.updateOne({ _id: user._id }, { $pull: newUser }, (err, doc) => {
     if (err) {
       console.log(err);
     } else {

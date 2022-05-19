@@ -16,9 +16,11 @@
                   <span class="material-icons mx-2">chat</span> chat
                 </a>
               <% } else if (isHasRequested == true) { %>
-                <a href="#" class="btn btn-primary d-inline-flex">
-                  <span class="material-icons mx-2">person_add_disabled</span> cancel request
-                </a>
+                <form action="/users/cancel/<%= profile._id %>" method="post">
+                  <button type="submit" name="button" class="btn btn-primary d-inline-flex">
+                    <span class="material-icons mx-2">person_off</span> cancel request
+                  </button>
+                </form>
               <% } else if (isRequestSent == true) { %>
                 <a href="#" class="btn btn-primary me-3">confirm</a>
                 <a href="#" class="btn btn-primary d-inline-flex">ignore</a>
