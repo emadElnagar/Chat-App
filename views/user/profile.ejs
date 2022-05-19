@@ -22,8 +22,12 @@
                   </button>
                 </form>
               <% } else if (isRequestSent == true) { %>
-                <a href="#" class="btn btn-primary me-3">confirm</a>
-                <a href="#" class="btn btn-primary d-inline-flex">ignore</a>
+                <a href="#" class="btn btn-primary me-3 d-inline-flex"><span class="material-icons me-1">done</span>confirm</a>
+                <form action="/users/ignore/<%= profile._id %>" method="post">
+                  <button type="submit" class="btn btn-primary d-inline-flex">
+                    <span class="material-icons me-1">close</span>ignore
+                  </button>
+                </form>
               <% } else { %>
                 <form action="/users/request/<%= profile._id %>" method="post">
                   <button type="submit" class="btn btn-primary d-inline-flex">

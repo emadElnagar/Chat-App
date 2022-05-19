@@ -218,4 +218,27 @@ router.post('/cancel/:id', isAuth, async(req, res) => {
   });
 });
 
+// IGNORE FRIEND REQUEST
+router.post('/ignore/:id', isAuth, async(req, res) => {
+  const user = req.session.user;
+  const profileId = req.params.id;
+  const profile = await User.findById(profileId);
+  const newUser = { friendRequests: { firstName: profile.firstName, lastName:profile.lastName, image: profile.profileImg, id: profile._id } };
+  const newProfile = { sentRequests: { firstName: user.firstName, lastName:user.lastName, image: user.image, id: user._id } };
+  User.updateOne({ _id: profileId }, { $pull: newProfile }, (err, doc) => {
+    if(err) {
+      console.log(err);
+    } else {
+      return;
+    }
+  });
+  User.updateOne({ _id: user._id }, { $pull: newUser }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`/users/profile/${profileId}`);
+    }
+  });
+});
+
 module.exports = router;
