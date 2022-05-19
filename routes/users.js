@@ -241,4 +241,57 @@ router.post('/ignore/:id', isAuth, async(req, res) => {
   });
 });
 
+// ACCEPT FRIEND REQUEST
+router.post('/accept/:id', isAuth, async(req, res) => {
+  const user = req.session.user;
+  const profileId = req.params.id;
+  const profile = await User.findById(profileId);
+  // USER INFORMATIONS OBJECT
+  const userObj = {
+    id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    image: user.image
+  };
+  // PROFILE INFORMATIONS OBJECT
+  const profileObj = {
+    id: profile._id,
+    firstName: profile.firstName,
+    lastName: profile.lastName,
+    image: profile.profileImg
+  };
+  // REMOVE PROFILE FROM FRIEND REQUESTS
+  User.updateOne({ _id: user._id }, { $pull: { friendRequests: profileObj } }, (err, doc) => {
+    if(err) {
+      console.log(err);
+    } else {
+      return;
+    }
+  });
+  // ADD PROFILE TO FRIENDS ARRAY
+  User.updateOne({ _id: user._id }, { $push: { friends: profileObj } }, (err, doc) => {
+    if(err) {
+      console.log(err);
+    } else {
+      return;
+    }
+  });
+  // REMOVE USER FROM PROFILE SENT REQUESTS
+  User.updateOne({ _id: profileId }, { $pull: { sentRequests: userObj } }, (err, doc) => {
+    if(err) {
+      console.log(err);
+    } else {
+      return;
+    }
+  });
+  // ADD USER TO PROFILE FRIENDS ARRAY
+  User.updateOne({ _id: profileId }, { $push: { friends: userObj } }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`/users/profile/${profileId}`);
+    }
+  })
+});
+
 module.exports = router;
