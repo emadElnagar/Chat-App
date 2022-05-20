@@ -144,6 +144,8 @@ router.get('/profile/:id', async(req, res, next) => {
     res.render('404', { title: 'Chat-profile', user: req.session.user });
     return;
   }
+  const changeUserNameError = req.flash('changeUserNameError');
+  const successMessage = req.flash('success');
   const isFriend = () => {
     if (req.session.user) {
       const friendRequests = profile.friends.find(friend => friend.id === req.session.user._id);
@@ -166,9 +168,46 @@ router.get('/profile/:id', async(req, res, next) => {
     title: 'Chat-profile',
     user: req.session.user,
     profile: profile,
+    changeUserNameError: changeUserNameError,
+    successMessage: successMessage,
     isFriend: isFriend(),
     isRequestSent: isRequestSent(),
     isHasRequested: isHasRequested()
+  });
+});
+
+// EDIT USER NAME
+router.post('/edit-username', isAuth, [
+  check('firstName')
+    .not().isEmpty().withMessage('please enter your first name')
+    .isLength({ min: 3, max: 20 }).withMessage('first name must be between 3 and 20 characters')
+    .not().matches(/\d/)
+    .withMessage('first name can not contain a number'),
+  check('lastName')
+    .not().isEmpty().withMessage('please enter your last name')
+    .isLength({ min: 3, max: 20 }).withMessage('last name must be between 3 and 20 characters')
+    .not().matches(/\d/)
+    .withMessage('last name can not contain a number')
+], (req, res, next) => {
+  const user = req.session.user;
+  const errors = validationResult(req);
+  if (! errors.isEmpty()) {
+    var validationErrors = [];
+    for(var i = 0; i < errors.errors.length; i++) {
+      validationErrors.push(errors.errors[i].msg);
+    }
+    req.flash('changeUserNameError', validationErrors);
+    res.redirect(`profile/${user._id}`);
+    return;
+  }
+  const newUser = { firstName: req.body.firstName, lastName: req.body.lastName };
+  User.updateOne({ _id: req.session.user._id }, { $set: newUser }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'username changed successfully');
+      res.redirect(`profile/${user._id}`);
+    }
   });
 });
 

@@ -6,7 +6,37 @@
         <img src="<%= profile.profileImg %>" alt="sorry it's problem showing this image" class="img-fluid rounded-circle">
       </div>
       <div class="col-8">
-        <h1 class="text-center text-capitalize"><%= profile.firstName %> <%= profile.lastName %></h1>
+        <h1 class="text-center text-capitalize mb-4"><%= profile.firstName %> <%= profile.lastName %></h1>
+        <div class="row">
+          <form id="user-name-form" class="shadow p-5 d-none" action="/users/edit-username" method="post">
+            <h4 class="text-capitalize mb-4">change your name</h4>
+
+            <div class="field d-flex flex-column-reverse mt-2">
+              <input type="text" name="firstName" class="w-100" required>
+              <label for="firstName">first name</label>
+            </div>
+
+            <div class="field d-flex flex-column-reverse mt-2">
+              <input type="text" name="lastName" class="w-100" required>
+              <label for="lastName">last name</label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">submit</button>
+          </form>
+          <% changeUserNameError.forEach(function(message){ %>
+            <div class="d-flex justify-content-center">
+              <div class="alert alert-danger text-center mt-3 form-alert" role="alert">
+                <%= message %>
+              </div>
+            </div>
+          <% }); %>
+          <% successMessage.forEach(function(message){ %>
+            <div class="d-flex justify-content-center">
+              <div class="alert alert-success text-center mt-3 form-alert" role="alert">
+                <%= message %>
+              </div>
+            </div>
+          <% }); %>
+        </div>
         <div class="d-flex justify-content-center mt-3">
           <% if (user) { %>
             <% if (user._id != profile._id) { %>
@@ -148,9 +178,22 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane fade py-3" id="contact" role="tabpanel" aria-labelledby="contact-tab">User Info</div>
+        <div class="tab-pane fade py-3" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+          <div class="row mb-3">
+            <div id="user-name" class="d-flex justify-content-between">
+              <h4 class="text-capitalize"><%= profile.firstName %> <%= profile.lastName %></h4>
+              <% if (user && user._id == profile._id) { %>
+                <span id="user-name-edit" class="material-icons fs-5 cursor-pointer d-none">edit</span>
+              <% } %>
+            </div>
+          </div>
+          <div class="row">
+            <span><%= profile.gender %></span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 <%- include('../components/footer') %>
+<script src="/javascripts/profile.js"></script>
