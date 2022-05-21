@@ -3,6 +3,7 @@ var router = express.Router();
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 const { isAuth, isNotAuth } = require('../auth');
+const fs = require('fs');
 const User = require('../models/user');
 
 /* GET users listing. */
@@ -441,6 +442,28 @@ router.post('/remove/:id', isAuth, async(req, res) => {
       console.log(err);
     } else {
       res.redirect(`/users/profile/${profileId}`);
+    }
+  });
+});
+
+// DELETE USER ACCOUNT
+router.post('/delete-account', async(req, res, next) => {
+  const user = req.session.user;
+  const profile = await User.findById(user._id);
+  const path = './public' + profile.profileImg;
+  if (profile.profileImg !== '/images/default-user-image.png') {
+    fs.unlink(path, (err) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    })
+  }
+  User.deleteOne({ _id: user._id }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('logout');
     }
   });
 });

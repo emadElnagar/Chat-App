@@ -236,9 +236,36 @@
               <span id="change-email-btn" class="btn btn-primary w-auto">change email</span>
             <% } %>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <% if (user && user._id == profile._id) { %>
               <span id="change-password-btn" class="btn btn-primary w-auto">change password</span>
+            <% } %>
+          </div>
+          <div class="row">
+            <!-- DELETE ACCOUNT -->
+            <% if (user && user._id == profile._id) { %>
+                <button type="button" class="btn btn-danger w-auto" data-bs-toggle="modal" data-bs-target="#delete-account">
+                  delete my account
+                </button>
+                <div class="modal fade" id="delete-account" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-capitalize" id="exampleModalLabel">delete account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h4 class="text-capitalize text-center">are you sure you want to delete your accoutn ?</h4>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <form action="/users/delete-account" method="post">
+                          <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             <% } %>
           </div>
         </div>
