@@ -38,10 +38,10 @@
             </div>
           <% }); %>
           <!-- CHANGE USER EMAIL FORM -->
-          <form class="shadow p-5 d-none" id="change-email-form" action="index.html" method="post">
+          <form class="shadow p-5 d-none" id="change-email-form" action="/users/change-email" method="post">
             <h4 class="text-capitalize mb-4">change your email</h4>
             <div class="field d-flex flex-column-reverse mt-2">
-              <input type="text" name="email" id="email" value=<%= profile.email %> class="w-100" required>
+              <input type="email" name="email" id="email" value=<%= profile.email %> class="w-100" required>
               <label for="email">new email</label>
             </div>
             <button type="submit" class="btn btn-primary mt-3">submit</button>
@@ -53,9 +53,26 @@
               </div>
             </div>
           <% }); %>
-          <% successMessage.forEach(function(message){ %>
+          <!-- CHANGE USER PASSWORD FORM -->
+          <form class="shadow p-5 d-none" id="change-password-form" action="/users/change-password" method="post">
+            <h4>change your passwrod</h4>
+            <div class="field d-flex flex-column-reverse mt-2">
+              <input type="password" name="currentPassword" id="old-password" required>
+              <label for="old-password">old password</label>
+            </div>
+            <div class="field d-flex flex-column-reverse mt-2">
+              <input type="password" name="newPassword" id="new-password" required>
+              <label for="new-password">new password</label>
+            </div>
+            <div class="field d-flex flex-column-reverse mt-2">
+              <input type="password" name="confirmNewPassword" id="confirm-password" required>
+              <label for="confirm-password">confirm password</label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">submit</button>
+          </form>
+          <% changePasswordError.forEach(function(message){ %>
             <div class="d-flex justify-content-center">
-              <div class="alert alert-success text-center mt-3 form-alert" role="alert">
+              <div class="alert alert-danger text-center mt-3 form-alert" role="alert">
                 <%= message %>
               </div>
             </div>
@@ -214,9 +231,14 @@
           <div class="row mb-3">
             <span><%= profile.gender %></span>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <% if (user && user._id == profile._id) { %>
               <span id="change-email-btn" class="btn btn-primary w-auto">change email</span>
+            <% } %>
+          </div>
+          <div class="row">
+            <% if (user && user._id == profile._id) { %>
+              <span id="change-password-btn" class="btn btn-primary w-auto">change password</span>
             <% } %>
           </div>
         </div>

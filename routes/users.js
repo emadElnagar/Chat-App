@@ -146,6 +146,8 @@ router.get('/profile/:id', async(req, res, next) => {
   }
   const changeUserNameError = req.flash('changeUserNameError');
   const successMessage = req.flash('success');
+  const changeEmailError = req.flash('changeEmailError');
+  const changePasswordError = req.flash('changePasswordError');
   const isFriend = () => {
     if (req.session.user) {
       const friendRequests = profile.friends.find(friend => friend.id === req.session.user._id);
@@ -171,6 +173,7 @@ router.get('/profile/:id', async(req, res, next) => {
     changeUserNameError: changeUserNameError,
     successMessage: successMessage,
     changeEmailError: changeEmailError,
+    changePasswordError: changePasswordError,
     isFriend: isFriend(),
     isRequestSent: isRequestSent(),
     isHasRequested: isHasRequested()
@@ -235,6 +238,49 @@ router.post('/change-email', [
       console.log(err);
     } else {
       req.flash('success', 'email changed successfully');
+      res.redirect(`profile/${user._id}`);
+    }
+  });
+});
+
+// CHANGE USER PASSWORD
+router.post('/change-password', [
+  check('currentPassword')
+    .not().isEmpty().withMessage('please enter your current password'),
+  check('newPassword')
+    .not().isEmpty().withMessage('please enter the new password')
+    .isLength({ min: 8 }).withMessage('password must be at least 8 characters'),
+  check('confirmNewPassword').custom((value, { req }) => {
+    if (value !== req.body.newPassword) {
+      throw new Error("passwrod and confirm passwrod doesn't match");
+    }
+    return true;
+  })
+], async(req, res, next) => {
+  const user = req.session.user;
+  const errors = validationResult(req);
+  if (! errors.isEmpty()) {
+    var validationErrors = [];
+    for(var i = 0; i < errors.errors.length; i++) {
+      validationErrors.push(errors.errors[i].msg);
+    }
+    req.flash('changePasswordError', validationErrors);
+    res.redirect(`profile/${user._id}`);
+    return;
+  }
+  const profile = await User.findOne({ email: user.email });
+  const validate = await bcrypt.compare(req.body.currentPassword, profile.password);
+  if (!validate) {
+    req.flash('changePasswordError', 'current password is wrong');
+    res.redirect(`profile/${user._id}`);
+    return;
+  }
+  const newUser = { password: new User().hashPassword(req.body.newPassword) };
+  User.updateOne({ _id: req.session.user._id }, {  $set: newUser }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'password changed successfully');
       res.redirect(`profile/${user._id}`);
     }
   });

@@ -20,3 +20,9 @@ const changeEmailForm = document.getElementById('change-email-form');
 changeEmailBtn.onclick = () => {
   changeEmailForm.classList.toggle('d-none');
 }
+// CHANGE PASSWORD FORM
+const changePasswordBtn = document.getElementById('change-password-btn');
+const changePasswordForm = document.getElementById('change-password-form');
+changePasswordBtn.onclick = () => {
+  changePasswordForm.classList.toggle('d-none');
+}
