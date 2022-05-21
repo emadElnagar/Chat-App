@@ -170,6 +170,7 @@ router.get('/profile/:id', async(req, res, next) => {
     profile: profile,
     changeUserNameError: changeUserNameError,
     successMessage: successMessage,
+    changeEmailError: changeEmailError,
     isFriend: isFriend(),
     isRequestSent: isRequestSent(),
     isHasRequested: isHasRequested()
@@ -206,6 +207,34 @@ router.post('/edit-username', isAuth, [
       console.log(err);
     } else {
       req.flash('success', 'username changed successfully');
+      res.redirect(`profile/${user._id}`);
+    }
+  });
+});
+
+// CHANGE EMAIL
+router.post('/change-email', [
+  check('email')
+    .not().isEmpty().withMessage('please enter your email')
+    .isEmail().withMessage('please enter a valid email'),
+  ], isAuth, (req, res, next) => {
+  const user = req.session.user;
+  const errors = validationResult(req);
+  if (! errors.isEmpty()) {
+    var validationErrors = [];
+    for(var i = 0; i < errors.errors.length; i++) {
+      validationErrors.push(errors.errors[i].msg);
+    }
+    req.flash('changeEmailError', validationErrors);
+    res.redirect(`profile/${user._id}`);
+    return;
+  }
+  const newUser = { email: req.body.email };
+  User.updateOne({ _id: req.session.user._id }, { $set: newUser }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      req.flash('success', 'email changed successfully');
       res.redirect(`profile/${user._id}`);
     }
   });

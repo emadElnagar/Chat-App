@@ -8,21 +8,45 @@
       <div class="col-8">
         <h1 class="text-center text-capitalize mb-4"><%= profile.firstName %> <%= profile.lastName %></h1>
         <div class="row">
+          <!-- CHANGE USER NAME FORM -->
           <form id="user-name-form" class="shadow p-5 d-none" action="/users/edit-username" method="post">
             <h4 class="text-capitalize mb-4">change your name</h4>
 
             <div class="field d-flex flex-column-reverse mt-2">
-              <input type="text" name="firstName" class="w-100" required>
-              <label for="firstName">first name</label>
+              <input type="text" name="firstName" id="firstName" value=<%= profile.firstName %> class="w-100" required>
+              <label for="firstName"first name</label>
             </div>
 
             <div class="field d-flex flex-column-reverse mt-2">
-              <input type="text" name="lastName" class="w-100" required>
+              <input type="text" name="lastName" id="lastName" value=<%= profile.lastName %> class="w-100" required>
               <label for="lastName">last name</label>
             </div>
             <button type="submit" class="btn btn-primary mt-3">submit</button>
           </form>
           <% changeUserNameError.forEach(function(message){ %>
+            <div class="d-flex justify-content-center">
+              <div class="alert alert-danger text-center mt-3 form-alert" role="alert">
+                <%= message %>
+              </div>
+            </div>
+          <% }); %>
+          <% successMessage.forEach(function(message){ %>
+            <div class="d-flex justify-content-center">
+              <div class="alert alert-success text-center mt-3 form-alert" role="alert">
+                <%= message %>
+              </div>
+            </div>
+          <% }); %>
+          <!-- CHANGE USER EMAIL FORM -->
+          <form class="shadow p-5 d-none" id="change-email-form" action="index.html" method="post">
+            <h4 class="text-capitalize mb-4">change your email</h4>
+            <div class="field d-flex flex-column-reverse mt-2">
+              <input type="text" name="email" id="email" value=<%= profile.email %> class="w-100" required>
+              <label for="email">new email</label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">submit</button>
+          </form>
+          <% changeEmailError.forEach(function(message){ %>
             <div class="d-flex justify-content-center">
               <div class="alert alert-danger text-center mt-3 form-alert" role="alert">
                 <%= message %>
@@ -187,8 +211,13 @@
               <% } %>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <span><%= profile.gender %></span>
+          </div>
+          <div class="row">
+            <% if (user && user._id == profile._id) { %>
+              <span id="change-email-btn" class="btn btn-primary w-auto">change email</span>
+            <% } %>
           </div>
         </div>
       </div>

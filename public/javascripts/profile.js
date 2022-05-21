@@ -1,3 +1,4 @@
+// CHANGE USER NAME FORM
 const userName = document.getElementById('user-name');
 const userNameEdit = document.getElementById('user-name-edit');
 const userNameForm = document.getElementById('user-name-form');
@@ -12,4 +13,10 @@ userName.onmouseout = () => {
 // SHOW AND HIDE EDIT USER NAME FORM WHEN CLICK ON EDIT ICON
 userNameEdit.onclick = () => {
   userNameForm.classList.toggle('d-none');
+}
+// CHANGE USER EMAIL FORM
+const changeEmailBtn = document.getElementById('change-email-btn');
+const changeEmailForm = document.getElementById('change-email-form');
+changeEmailBtn.onclick = () => {
+  changeEmailForm.classList.toggle('d-none');
 }
