@@ -55,7 +55,7 @@
           <% }); %>
           <!-- CHANGE USER PASSWORD FORM -->
           <form class="shadow p-5 d-none" id="change-password-form" action="/users/change-password" method="post">
-            <h4>change your passwrod</h4>
+            <h4 class="text-capitalize mb-4">change your passwrod</h4>
             <div class="field d-flex flex-column-reverse mt-2">
               <input type="password" name="currentPassword" id="old-password" required>
               <label for="old-password">old password</label>
@@ -139,34 +139,40 @@
         <div class="tab-pane fade py-3 show active" id="home" role="tabpanel" aria-labelledby="home-tab">Home</div>
         <div class="tab-pane fade py-3" id="profile" role="tabpanel" aria-labelledby="profile-tab">
           <div class="d-flex align-items-start">
-            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <div class="nav flex-column nav-pills <% if (user && user._id == profile._id) { %> w-25 <% } %> me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
               <% if (user && user._id == profile._id) { %>
                 <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Friends</button>
                 <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Friend Requests</button>
                 <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Requests Sent</button>
               <% } %>
             </div>
-            <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-content w-100" id="v-pills-tabContent">
               <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                <% for(var i=0; i<profile.friends.length; i++) {%>
-                   <div class="row mb-3">
-                     <div class="d-flex justify-content-between">
-                       <a href="/users/profile/<%= profile.friends[i].id %>" class="d-flex align-items-center me-5">
-                         <img
-                           src="<%= profile.friends[i].image %>"
-                           alt="oops! it's problem showing your photo"
-                           style="max-width:50px"
-                           class="rounded-circle mx-3"
-                         >
-                         <h5><%= profile.friends[i].firstName %> <%= profile.friends[i].lastName %></h5>
-                       </a>
-                       <div class="buttons">
-                         <a href="#" class="btn btn-primary">delete</a>
-                         <a href="#" class="btn btn-primary">chat</a>
+                <% if (user && user._id == profile._id || profile.friendsPrivacy == 'public') { %>
+                  <% for(var i=0; i<profile.friends.length; i++) {%>
+                     <div class="row mb-3">
+                       <div class="d-flex justify-content-between">
+                         <a href="/users/profile/<%= profile.friends[i].id %>" class="d-flex align-items-center me-5">
+                           <img
+                             src="<%= profile.friends[i].image %>"
+                             alt="oops! it's problem showing your photo"
+                             style="max-width:50px"
+                             class="rounded-circle mx-3"
+                           >
+                           <h5><%= profile.friends[i].firstName %> <%= profile.friends[i].lastName %></h5>
+                         </a>
+                         <% if (user && user._id == profile._id) { %>
+                           <div class="buttons">
+                             <a href="#" class="btn btn-primary">delete</a>
+                             <a href="#" class="btn btn-primary">chat</a>
+                           </div>
+                         <% } %>
                        </div>
                      </div>
-                   </div>
-                   <hr>
+                     <hr>
+                  <% } %>
+                <% } else { %>
+                  <h1>This user fiends is private</h1>
                 <% } %>
               </div>
               <% if (user && user._id == profile._id) { %>

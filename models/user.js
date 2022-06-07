@@ -12,7 +12,8 @@ const userSchema = mongoose.Schema({
   isModerator: { type: Boolean, required: true, default: false },
   friends: { type: [{ firstName: String, lastName:String, image: String, id: String }], default: [] },
   friendRequests: { type: [{ firstName: String, lastName:String, image: String, id: String }], default: [] },
-  sentRequests: { type: [{ firstName: String, lastName:String, image: String, id: String }], default: [] }
+  sentRequests: { type: [{ firstName: String, lastName:String, image: String, id: String }], default: [] },
+  friendsPrivacy: { type: String, required: true, default: 'public' }
 }, {
   timestamps: true,
 });
