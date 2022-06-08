@@ -3,8 +3,43 @@ var router = express.Router();
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 const { isAuth, isNotAuth } = require('../auth');
+const multer = require('multer');
 const fs = require('fs');
 const User = require('../models/user');
+
+const fileFilter = function(req, file, cb) {
+  if (file.mimetype !== 'image/png') {
+    cb(null, true)
+  } else if (file.mimetype !== 'image/jpg') {
+    cb(null, true)
+  } else {
+    cb(new Error('please enter jpg or png image'), false)
+  }
+}
+
+const storage = multer.diskStorage({
+  destination:  function(req, file, cb) {
+    cb(null, './public/media/profile')
+  },
+  filename: function(req, file, cb) {
+    cb(null, new Date().toDateString() + file.originalname)
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024*1024*5
+  },
+  fileFilter: fileFilter
+});
+
+router.use(upload.single('image'), (err, req, res, next) => {
+  if (err) {
+    req.flash('profileError', [err.message]);
+    res.redirect(`profile/${req.session.user._id}`);
+  }
+});
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -178,6 +213,32 @@ router.get('/profile/:id', async(req, res, next) => {
     isFriend: isFriend(),
     isRequestSent: isRequestSent(),
     isHasRequested: isHasRequested()
+  });
+});
+
+// UPLOAD PROFILE IMAGE
+router.post('/profile-img-upload', async(req, res, next) => {
+  const user = req.session.user;
+  const newUser = { profileImg: (req.file.path).slice(6) };
+  const userId = req.session.user._id;
+  const profile = await User.findById(userId);
+  const path = './public' + profile.profileImg;
+  if (profile.profileImg !== '/images/default-user-image.png') {
+    fs.unlink(path, (err) => {
+      if (err) {
+        req.flash('profileError', [err.message]);
+        res.redirect(`profile/${req.session.user._id}`);
+        return;
+      }
+    })
+  }
+  User.updateOne({ _id: req.session.user._id }, { $set: newUser }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      req.session.user.image = newUser.profileImg;
+      res.redirect(`profile/${user._id}`);
+    }
   });
 });
 
