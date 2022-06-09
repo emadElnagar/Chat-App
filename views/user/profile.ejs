@@ -2,8 +2,35 @@
 <section class="py-5">
   <div class="container">
     <div class="row">
-      <div class="col-4">
-        <img src="<%= profile.profileImg %>" alt="sorry it's problem showing this image" class="img-fluid rounded-circle">
+      <div class="profile-img-upload col-4">
+        <div class="position-relative rounded-circle overflow-hidden">
+          <img
+            src="<%= profile.profileImg %>"
+            alt="sorry it's problem showing this image"
+            class="img-fluid"
+            id="profile-image"
+          >
+          <% if (user && user._id == profile._id) { %>
+            <div class="profile-form position-absolute d-flex justify-content-center align-items-center">
+              <form action="/users/profile-img-upload" method="post">
+                <div class="d-flex flex-column-reverse mt-2">
+                  <div class="position-relative">
+                    <input id="profile-img" name="image" type="file">
+                    <label id="profile-label" class="material-icons img-upload-btn btn btn-light  px-3" for="profile-img">local_see</label>
+                  </div>
+                  <div id="profile-form-submition" class="d-none">
+                    <button type="submit" class="btn btn-warning rounded-circle">
+                      <span class="material-icons d-flex">done</span>
+                    </button>
+                    <a href="/users/profile/<%= profile.id %>" class="btn btn-danger rounded-circle">
+                      <span class="material-icons d-flex">close</span>
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          <% } %>
+        </div>
       </div>
       <div class="col-8">
         <h1 class="text-center text-capitalize mb-4"><%= profile.firstName %> <%= profile.lastName %></h1>
@@ -281,3 +308,20 @@
 </section>
 <%- include('../components/footer') %>
 <script src="/javascripts/profile.js"></script>
+<script>
+  // LIVE PREVIEW FOR PROFILE IMAGE CHANGE
+  let profileInput = document.getElementById('profile-img');
+  let profileLabel = document.getElementById('profile-label');
+  let profileFormSubmition = document.getElementById('profile-form-submition');
+  let profileForm = document.getElementById('profile-form');
+  profileInput.onchange = function () {
+    const reader = new FileReader();
+    reader.readAsDataURL(this.files[0]);
+    reader.onload = function () {
+      document.getElementById('profile-image').src = this.result;
+      profileLabel.classList.add('d-none');
+      profileFormSubmition.classList.remove('d-none');
+      profileForm.classList.add('active-form');
+    }
+  }
+</script>

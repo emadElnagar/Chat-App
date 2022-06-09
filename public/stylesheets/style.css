@@ -59,3 +59,31 @@ form textarea:focus {
 .field textarea:required + label::after {
   content: ' *';
 }
+
+.profile-form {
+  bottom: 0;
+  width: 100%;
+  height: 0;
+  transition: all .3s ease-in-out;
+  opacity: 0;
+  background: #f9fafb63;
+}
+
+.profile-img-upload:hover .profile-form {
+  height: 100%;
+  opacity: 1;
+}
+
+input[type="file"] {
+  position: absolute;
+  z-index: -1;
+  top: 8px;
+  left: 8px;
+  font-size: 17px;
+}
+
+input[type="file"],
+input[type="file"]:focus {
+  border-bottom: 0;
+  opacity: 0;
+}
