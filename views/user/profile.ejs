@@ -12,7 +12,7 @@
           >
           <% if (user && user._id == profile._id) { %>
             <div class="profile-form position-absolute d-flex justify-content-center align-items-center">
-              <form action="/users/profile-img-upload" method="post">
+              <form action="/users/profile-img-upload" method="post" enctype="multipart/form-data">
                 <div class="d-flex flex-column-reverse mt-2">
                   <div class="position-relative">
                     <input id="profile-img" name="image" type="file">
