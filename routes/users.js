@@ -349,13 +349,13 @@ router.post('/change-password', [
 });
 
 // EDIT USER FRIENDS PRIVACY [SHOW HIDE FRIENDS]
-router.post('/edit-friends-privacy/:id', isAuth, async(req, res) => {
-  const profileId = req.params.id;
-  User.updateOne({ _id: profileId }, { $set: { friendsPrivacy: req.body.friendsPrivacy } }, (err, doc) => {
+router.post('/edit-friends-privacy', isAuth, async(req, res) => {
+  const userId = req.session.user._id;
+  User.updateOne({ _id: userId }, { $set: { friendsPrivacy: req.body.friendsPrivacy } }, (err, doc) => {
     if (err) {
       console.log(err);
     } else {
-      res.redirect(`profile/${profileId}`);
+      res.redirect(`profile/${userId}`);
     }
   });
 });
