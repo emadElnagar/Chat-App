@@ -348,6 +348,18 @@ router.post('/change-password', [
   });
 });
 
+// EDIT USER FRIENDS PRIVACY [SHOW HIDE FRIENDS]
+router.post('/edit-friends-privacy/:id', isAuth, async(req, res) => {
+  const profileId = req.params.id;
+  User.updateOne({ _id: profileId }, { $set: { friendsPrivacy: req.body.friendsPrivacy } }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`profile/${profileId}`);
+    }
+  });
+});
+
 // SEND AND RECIEVE FRIEND REQUESTS
 router.post('/request/:id', isAuth, async(req, res, next) => {
   const user = req.session.user;
