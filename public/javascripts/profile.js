@@ -1,3 +1,18 @@
+// LIVE PREVIEW FOR PROFILE IMAGE CHANGE
+let profileInput = document.getElementById('profile-img');
+let profileLabel = document.getElementById('profile-label');
+let profileFormSubmition = document.getElementById('profile-form-submition');
+let profileForm = document.getElementById('profile-form');
+profileInput.onchange = function () {
+  const reader = new FileReader();
+  reader.readAsDataURL(this.files[0]);
+  reader.onload = function () {
+    document.getElementById('profile-image').src = this.result;
+    profileLabel.classList.add('d-none');
+    profileFormSubmition.classList.remove('d-none');
+    profileForm.classList.add('active-form');
+  }
+}
 // CHANGE USER NAME FORM
 const userName = document.getElementById('user-name');
 const userNameEdit = document.getElementById('user-name-edit');
