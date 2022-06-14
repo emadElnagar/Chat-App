@@ -4,6 +4,11 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const { isAdmin } = require('../auth');
 
+// GET ADMIN MAIN PAGE
+router.get('/', isAdmin, (req, res) => {
+  res.render('admin/admin_main', { title: 'Chat-admin', user: req.session.user });
+});
+
 // GET ADMIN LOGIN PAGE
 router.get('/login', (req, res) => {
   let errorMessage = req.flash('loginError');
