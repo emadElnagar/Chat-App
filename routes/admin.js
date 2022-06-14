@@ -54,4 +54,9 @@ router.post('/login', async(req, res) => {
   }
 });
 
+router.get('/users', isAdmin, async (req, res) => {
+  const users = await User.find({});
+  res.render('admin/all_users', { title: 'Chat-users', allUsers: users, user: req.session.user });
+});
+
 module.exports = router;
