@@ -19,7 +19,7 @@ router.get('/login', (req, res) => {
       res.render('404', { title: 'Chat', user: req.session.user });
     }
   } else {
-    res.render('admin/signin', { title: 'Chat-admin-login', messages: errorMessage });
+    res.render('admin/signin', { title: 'Chat-admin-login', messages: errorMessage, user: false });
   }
 });
 
@@ -53,3 +53,5 @@ router.post('/login', async(req, res) => {
     res.redirect('login');
   }
 });
+
+module.exports = router;
