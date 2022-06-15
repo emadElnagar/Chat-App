@@ -23,6 +23,7 @@ router.get('/login', (req, res) => {
   }
 });
 
+// ADMIN LOGIN
 router.post('/login', async(req, res) => {
   const user = await User.findOne({ email: req.body.email });
   const loginError = `you arent allowed here or wrong password or email`;
@@ -54,9 +55,16 @@ router.post('/login', async(req, res) => {
   }
 });
 
+// GET ALL USERS PAGE
 router.get('/users', isAdmin, async (req, res) => {
   const users = await User.find({});
   res.render('admin/all_users', { title: 'Chat-users', allUsers: users, user: req.session.user });
+});
+
+// GET SINGLE USER PAGE
+router.get('/users/:id', isAdmin, async (req, res) => {
+  const profile = await User.findById(req.params.id);
+  res.render('admin/single_user', { title: 'Chat-single-user', profile: profile, user: req.session.user });
 });
 
 module.exports = router;

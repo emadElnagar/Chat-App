@@ -13,7 +13,7 @@
         <% for (var i = 0; i < allUsers.length; i++) { %>
           <tr class="border border-top-0">
             <td class="p-2 d-flex justify-content-between">
-              <a href="#"><%= allUsers[i].firstName %> <%= allUsers[i].lastName %></a>
+              <a href="/admin/users/<%= allUsers[i]._id %>"><%= allUsers[i].firstName %> <%= allUsers[i].lastName %></a>
             </td>
             <td><%= allUsers[i].isAdmin %></td>
           </tr>

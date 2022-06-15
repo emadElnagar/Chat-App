@@ -1,0 +1,33 @@
+<%- include('../components/header')%>
+<section class="py-5">
+  <div class="container">
+    <div class="row d-flex align-items-center">
+      <div class="col-4">
+        <img
+          src="<%= profile.profileImg %>"
+          alt="sorry it's problem showing this image"
+          class="img-fluid rounded-circle border"
+          id="profile-image"
+        >
+      </div>
+      <div class="col-8">
+        <h1 class="text-capitalize text-center"><%= profile.firstName %> <%= profile.lastName %></h1>
+        <div class="text-center my-4">
+          <!-- IS ADMIN -->
+          <% if (profile.isAdmin == true) { %>
+            <span class="bg-success py-1 px-3 text-capitalize text-light">admin</span>
+          <% } else { %>
+            <span class="bg-danger py-1 px-3 text-capitalize text-light">not admin</span>
+          <% } %>
+          <!-- IS MODERATOR -->
+          <% if (profile.isModerator == true) { %>
+            <span class="bg-success py-1 px-3 text-capitalize text-light">moderator</span>
+          <% } else { %>
+            <span class="bg-danger py-1 px-3 text-capitalize text-light">not moderator</span>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('../components/footer')%>
