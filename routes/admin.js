@@ -69,9 +69,22 @@ router.get('/users/:id', isAdmin, async (req, res) => {
 
 // CREATE A MODERATOR USER
 router.post('/craete-moderator/:id', isAdmin, async (req, res) => {
-  const profileId = req.params.id
+  const profileId = req.params.id;
   const profile = await User.findById(profileId);
   User.updateOne({ _id: req.params.id }, { $set: { isModerator: true } }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`/admin/users/${profileId}`);
+    }
+  });
+});
+
+// ISOLATE MODERATOR
+router.post('/isolate-moderator/:id', isAdmin, async (req, res) => {
+  const profileId = req.params.id;
+  const profile = await User.findById(profileId);
+  User.updateOne({ _id: req.params.id }, { $set: { isModerator: false } }, (err, doc) => {
     if (err) {
       console.log(err);
     } else {
