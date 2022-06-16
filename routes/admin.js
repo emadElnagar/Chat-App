@@ -93,4 +93,25 @@ router.post('/isolate-moderator/:id', isAdmin, async (req, res) => {
   });
 });
 
+router.post('/delete/:id', isAdmin, async (req, res) => {
+  const profileId = req.params.id;
+  const profile = await User.findById(profileId);
+  const path = './public' + profile.profileImg;
+  if (profile.profileImg !== '/images/default-user-image.png') {
+    fs.unlink(path, (err) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    })
+  }
+  User.deleteOne({ _id: profileId }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect('/admin/users');
+    }
+  });
+});
+
 module.exports = router;
