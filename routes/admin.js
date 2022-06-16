@@ -67,4 +67,17 @@ router.get('/users/:id', isAdmin, async (req, res) => {
   res.render('admin/single_user', { title: 'Chat-single-user', profile: profile, user: req.session.user });
 });
 
+// CREATE A MODERATOR USER
+router.post('/craete-moderator/:id', isAdmin, async (req, res) => {
+  const profileId = req.params.id
+  const profile = await User.findById(profileId);
+  User.updateOne({ _id: req.params.id }, { $set: { isModerator: true } }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect(`/admin/users/${profileId}`);
+    }
+  });
+});
+
 module.exports = router;

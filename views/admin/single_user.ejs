@@ -35,7 +35,29 @@
     <div class="row">
       <div class="col-12">
         <a class="btn btn-primary text-capitalize" href="/users/profile/<%= profile._id %>">public profile</a>
-        <a class="btn btn-success text-capitalize" href="#">create moderator</a>
+        <!-- CREATE MODERATOR -->
+        <button type="button" class="btn btn-success text-capitalize" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          create moderator
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title text-capitalize" id="exampleModalLabel">new moderator</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body text-center text-capitalize">
+                are you sure you want to make <%= profile.firstName %> <%= profile.lastName %> as a new moderator
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <form action="/admin/craete-moderator/<%= profile._id %>" method="post">
+                  <button type="submit" class="btn btn-primary">Yes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
