@@ -93,6 +93,7 @@ router.post('/isolate-moderator/:id', isAdmin, async (req, res) => {
   });
 });
 
+// DELETE USER
 router.post('/delete/:id', isAdmin, async (req, res) => {
   const profileId = req.params.id;
   const profile = await User.findById(profileId);

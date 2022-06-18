@@ -2,20 +2,34 @@
 <section class="py-5">
   <div class="container">
     <h1 class="text-capitalize text-center mb-4">all users</h1>
-    <table class="w-100 text-capitalize">
+    <table class="w-100 text-capitalize text-center">
       <thead>
         <tr class="bg-primary border border-1">
           <th class="p-2 text-light">name</th>
           <th class="p-2 text-light">is admin</th>
+          <th class="p-2 text-light">is moderator</th>
         </tr>
       </thead>
       <tbody>
         <% for (var i = 0; i < allUsers.length; i++) { %>
           <tr class="border border-top-0">
-            <td class="p-2 d-flex justify-content-between">
+            <td class="p-2">
               <a href="/admin/users/<%= allUsers[i]._id %>"><%= allUsers[i].firstName %> <%= allUsers[i].lastName %></a>
             </td>
-            <td><%= allUsers[i].isAdmin %></td>
+            <td>
+              <% if (allUsers[i].isAdmin == true) { %>
+                <span class="material-icons fs-6 text-light bg-success rounded-circle p-1">done</span>
+              <% } else { %>
+                <span class="material-icons fs-6 text-light bg-danger rounded-circle p-1">close</span>
+              <% } %>
+            </td>
+            <td>
+              <% if (allUsers[i].isModerator == true) { %>
+                <span class="material-icons fs-6 text-light bg-success rounded-circle p-1">done</span>
+              <% } else { %>
+                <span class="material-icons fs-6 text-light bg-danger rounded-circle p-1">close</span>
+              <% } %>
+            </td>
           </tr>
         <% } %>
       </tbody>
