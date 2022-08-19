@@ -32,6 +32,10 @@ server.on('listening', onListening);
 const socket = require('socket.io');
 const io = socket(server);
 
+io.on('connection', (socket) => {
+  require('../sockets/init.socket')(socket);
+});
+
 /**
  * Normalize a port into a number, string, or false.
  */

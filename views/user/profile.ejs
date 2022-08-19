@@ -345,5 +345,10 @@
     </div>
   </div>
 </section>
+<% if (user) { %>
+<input type="hidden" id="userId" value="<%= user._id %>">
+<%}%>
+<!-- <script src="/socket.io/socket.io.js"></script>
+<script src="/javascripts/sockets/init.js"></script> -->
 <%- include('../components/footer') %>
 <script src="/javascripts/profile.js"></script>
