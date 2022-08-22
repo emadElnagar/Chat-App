@@ -1,6 +1,47 @@
 <%- include('../components/header') %>
 <div class="container">
-  <h6 class="text-center">searchedUsersf : <%= searchedUsersf %></h6>
-  <h6 class="text-center">searchedUsersl : <%= searchedUsersl %></h6>
+  <div class="shadow py-2 px-4">
+    <%# SEARCHED USER BY FIRST NAME %>
+    <% if (searchedUsersf) { %>
+      <% for (i = 0; i < searchedUsersf.length; i++) { %>
+        <div class="row py-2 user-searched d-flex align-items-center">
+          <div class="col-1">
+            <img src="<%= searchedUsersf[i].profileImg %>" class="rounded-circle img-fluid border">
+          </div>
+          <div class="col-6">
+            <a href="/users/profile/<%= searchedUsersf[i]._id %>">
+              <h6 class="text-capitalize"><%= searchedUsersf[i].firstName %> <%= searchedUsersf[i].lastName %></h6>
+            </a>
+          </div>
+          <div class="col-5">
+            <a href="/users/profile/<%= searchedUsersf[i]._id %>" class="float-end btn btn-primary d-flex">
+              view profile
+            </a>
+          </div>
+        </div>
+      <% } %>
+    <% } %>
+
+    <%# SEARCHED USER BY LAST NAME %>
+    <% if (searchedUsersl) { %>
+      <% for (i = 0; i < searchedUsersl.length; i++) { %>
+        <div class="row py-2 user-searched d-flex align-items-center">
+          <div class="col-1">
+            <img src="<%= searchedUsersl[i].profileImg %>" class="rounded-circle img-fluid border">
+          </div>
+          <div class="col-6">
+            <a href="/users/profile/<%= searchedUsersl[i]._id %>">
+              <h6 class="text-capitalize"><%= searchedUsersl[i].firstName %> <%= searchedUsersl[i].lastName %></h6>
+            </a>
+          </div>
+          <div class="col-5">
+            <a href="/users/profile/<%= searchedUsersl[i]._id %>" class="float-end btn btn-primary d-flex">
+              view profile
+            </a>
+          </div>
+        </div>
+      <% } %>
+    <% } %>
+  </div>
 </div>
 <%- include('../components/footer') %>

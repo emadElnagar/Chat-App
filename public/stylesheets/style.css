@@ -87,3 +87,7 @@ input[type="file"]:focus {
   border-bottom: 0;
   opacity: 0;
 }
+
+.user-searched:not(:last-child) {
+  border-bottom: 1px solid #73777B;
+}
